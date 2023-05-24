@@ -12,4 +12,4 @@ class Product(BaseModel):
     id: str = Field(default_factory=generate_uuid)
     name: str
     price: float
-    date: str = Field(default_factory=generate_uuid)
+    date: str = Field(default_factory=generate_date)
