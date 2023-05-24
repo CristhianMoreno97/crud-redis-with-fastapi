@@ -12,3 +12,10 @@ def create(product: Product):
         return product
     except Exception as e:
         return {"error": e}
+    
+@routes_product.get("/get/{id}")
+def get(id: str):
+    try:
+        return list(filter(lambda product: product["id"] == id, fake_db))
+    except Exception as e:
+        return {"error": e}
