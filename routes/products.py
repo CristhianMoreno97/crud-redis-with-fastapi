@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from schemas.product import Product
-from redis_client.crud import save_hash
+from redis_client.crud import get_hash, save_hash
 
 routes_product = APIRouter()
 
@@ -20,7 +20,18 @@ def create(product: Product):
 @routes_product.get("/get/{id}")
 def get(id: str):
     try:
-        return list(filter(lambda product: product["id"] == id, fake_db))[0]
+        # try get from redis
+        product = get_hash(key=id)
+        if len(product) > 0:
+            return product
+
+        # try get from database
+        product = list(filter(lambda product: product["id"] == id, fake_db))[0]
+        
+        # save on redis
+        save_hash(key=id, data=product)
+
+        return product
     except Exception as e:
         return {"error": e}
     
