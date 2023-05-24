@@ -19,3 +19,13 @@ def get(id: str):
         return list(filter(lambda product: product["id"] == id, fake_db))
     except Exception as e:
         return {"error": e}
+    
+@routes_product.delete("/delete/{id}")
+def delete(id: str):
+    try:
+        product = list(filter(lambda product: product["id"] == id, fake_db))
+        if product:
+            fake_db.remove(product)
+        return {"message": "Product deleted"}
+    except Exception as e:
+        return {"error": e}
