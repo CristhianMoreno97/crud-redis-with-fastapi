@@ -42,7 +42,7 @@ def delete(id: str):
         keys = Product.__fields__.keys()
         delete_hash(key=id, keys=keys)
         # delete from database
-        product = list(filter(lambda product: product["id"] == id, fake_db))
+        product = list(filter(lambda product: product["id"] == id, fake_db))[0]
         if product:
             fake_db.remove(product)
         return {"message": "Product deleted"}
