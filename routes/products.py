@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from schemas.product import Product
-from redis_client.crud import get_hash, save_hash
+from redis_client.crud import delete_hash, get_hash, save_hash
 
 routes_product = APIRouter()
 
@@ -38,6 +38,10 @@ def get(id: str):
 @routes_product.delete("/delete/{id}")
 def delete(id: str):
     try:
+        # delete from redis
+        keys = Product.__fields__.keys()
+        delete_hash(key=id, keys=keys)
+        # delete from database
         product = list(filter(lambda product: product["id"] == id, fake_db))
         if product:
             fake_db.remove(product)
